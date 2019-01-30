@@ -19,6 +19,7 @@ namespace ILEmu.Values
         public Int4(int value)
         {
             Value = value;
+            UpdateCache();
         }
 
         public void UpdateCache()
@@ -63,6 +64,7 @@ namespace ILEmu.Values
                 throw new ArgumentException("Offset is not in range");
             TransformOffset(ref offset);
             cache[offset] = data;
+            UpdateValue();
         }
     }
 }
