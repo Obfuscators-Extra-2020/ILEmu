@@ -1,5 +1,7 @@
 ﻿using ILEmu.Structures;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ILEmu.Values
@@ -20,6 +22,37 @@ namespace ILEmu.Values
         {
             Value = value;
             UpdateCache();
+        }
+
+        public Int4(IEnumerable<byte> data, int start)
+        {
+            if (data.Count() - start < size)
+                throw new ArgumentException("There is not enough bytes in data");
+            var newCache = data.Skip(start).Take(size).ToArray();
+            if (BitConverter.IsLittleEndian)
+                newCache = newCache.Reverse().ToArray();
+            for(int i = 0; i< size;i++)
+            {
+                int offset = i;
+                TransformOffset(ref offset);
+                cache[offset] = newCache[i];
+            }
+            UpdateValue();
+        }
+        public Int4(IEnumerable<byte?> data, int start)
+        {
+            if (data.Count() - start < size)
+                throw new ArgumentException("There is not enough bytes in data");
+            var newCache = data.Skip(start).Take(size).ToArray();
+            if (BitConverter.IsLittleEndian)
+                newCache = newCache.Reverse().ToArray();
+            for (int i = 0; i < size; i++)
+            {
+                int offset = i;
+                TransformOffset(ref offset);
+                cache[offset] = newCache[i];
+            }
+            UpdateValue();
         }
 
         public void UpdateCache()
@@ -48,6 +81,17 @@ namespace ILEmu.Values
             if (BitConverter.IsLittleEndian)
                 toConvert = toConvert.Reverse().ToArray();
             Value = BitConverter.ToInt32(toConvert, 0);
+        }
+
+        public void Truncate(int size)
+        {
+            for (int i = size; i < Size; i++)
+            {
+                int offset = i;
+                TransformOffset(ref offset);
+                cache[offset] = 0;
+            }
+            UpdateValue();
         }
 
         public override byte? GetByte(int offset)
