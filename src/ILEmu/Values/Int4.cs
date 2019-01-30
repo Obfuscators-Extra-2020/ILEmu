@@ -1,9 +1,6 @@
-﻿using ILEmu.Helpers;
-using ILEmu.Structures;
+﻿using ILEmu.Structures;
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ILEmu.Values
 {

@@ -1,7 +1,4 @@
 ﻿using ILEmu.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ILEmu.Structures
 {
